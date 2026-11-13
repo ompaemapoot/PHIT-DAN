@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#eef2f7">
+  <meta name="description" content="PHIT DAN is a small browser game about flipping a USB drive the right way before the socket closes.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PHIT DAN">
+  <meta property="og:title" content="PHIT DAN">
+  <meta property="og:description" content="Flip the USB drive the right way before the socket closes. A small browser game with three modes.">
+  <meta property="og:image" content="./assets/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="PHIT DAN wordmark on a slate background with the three modes Hub, Rail and Beat.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PHIT DAN">
+  <meta name="twitter:description" content="Flip the USB drive the right way before the socket closes. A small browser game with three modes.">
+  <meta name="twitter:image" content="./assets/og-card.png">
+  <title>PHIT DAN</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233157a4'/%3E%3Cg fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M12 13V7h8v6'/%3E%3Crect x='9' y='13' width='14' height='13' rx='2.5'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="./fonts.css?v=3">
+  <link rel="stylesheet" href="./style.css?v=info-6">
+</head>
+<body>
+  <main class="game-shell menu-open" id="game-shell" aria-label="USB game">
+    <div class="stage" id="stage">
+      <div id="scene" aria-label="3D USB port and flash drive"></div>
+    </div>
+
+    <div class="hud">
+      <div class="score-chip"><span class="score-label">SCORE</span><strong id="score">00</strong><span class="score-toast" id="score-toast" aria-hidden="true" hidden></span><span class="mode-indicator" id="timing-indicator" hidden>BEAT</span></div>
+      <div class="hud-taunt" id="hud-taunt" aria-live="polite" hidden></div>
+    </div>
+    <div class="timer" id="timer" role="timer" aria-label="Time remaining">
+      <span class="sr-only"><span id="timer-label">Inserting in</span> <span id="timer-text">Get ready</span></span>
+      <div class="progress-track" id="progress-track" aria-hidden="true">
+        <div class="progress-clip"><div id="progress-bar"></div></div>
+        <span class="timing-window timing-window-good" id="timing-good-zone" hidden></span>
+        <span class="timing-window timing-window-perfect" id="timing-perfect-zone" hidden></span>
+        <span class="timing-cursor" id="timing-cursor" hidden></span>
+      </div>
+    </div>
+    <div class="sr-only" id="result" role="status" aria-live="polite"></div>
+    <span class="sr-only">In Hub and Rail, tap or click the game area, or press Space to flip; insertion is automatic. In Beat, flip before the timer ends, then tap or click the game area, or press Space, when the timing marker is in the GOOD or PERFECT band.</span>
+
+    <div class="start-overlay" id="start-overlay">
+      <div class="overlay-card">
+
+        <h1 id="overlay-title">PHIT <span>DAN</span><svg class="usb-icon" viewBox="7 2 18 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 12V3h10v9"/><rect x="8" y="12" width="16" height="17" rx="3"/><path d="M14 6v2m4-2v2"/></svg></h1>
+        <div class="game-over-summary" id="overlay-description" hidden>
+            <p id="game-over-title">Game over</p>
+            <div><span>Score</span> <strong id="final-score">0</strong></div>
+            <p class="failure-reason" id="failure-reason">The USB was facing the wrong way.</p>
+        </div>
+        <div class="result-actions" id="result-actions" hidden>
+          <button class="primary" id="start-btn" type="button" hidden>Play again</button>
+          <button class="secondary" id="change-player" type="button" hidden>Menu</button>
+        </div>
+        <section class="taunt-panel" id="taunt-panel" aria-labelledby="taunt-title" hidden>
+          <h2 id="taunt-title">Leave a message</h2>
+          <p class="taunt-hint">Players who reach <strong id="taunt-score">0</strong> points in this mode will see it while they play.</p>
+          <div class="taunt-compose" id="taunt-compose">
+            <label class="sr-only" for="taunt-input">Your message for the next player</label>
+            <input id="taunt-input" type="text" maxlength="60" autocomplete="off" placeholder="Say something funny...">
+            <button class="primary" id="taunt-submit" type="button">Post</button>
+          </div>
+          <p class="taunt-status" id="taunt-status" role="status" aria-live="polite"></p>
+        </section>
+        <div class="how-to-play" id="how-to-play" aria-label="How to play">
+          <p class="guide-heading">HOW TO PLAY</p>
+          <div class="guide-cases" aria-hidden="true">
+            <div class="guide-case guide-flip">
+              <p class="guide-case-label"><b>×</b> FLIP</p>
+              <div class="guide-image"><img class="orientation-guide" src="./assets/guide-flip.png" alt=""><span class="guide-led"></span></div>
+            </div>
+            <div class="guide-case guide-ready">
+              <p class="guide-case-label"><b>✓</b> READY</p>
+              <div class="guide-image"><img class="orientation-guide" src="./assets/guide-ready.png" alt=""><span class="guide-led"></span></div>
+            </div>
+          </div>
+          <div class="guide-copy">
+            <p>USB marks and gold contacts: both visible or both hidden. If only one is visible, flip.</p>
+            <p><span class="guide-control">Tap, click or press Space to flip</span>. Hub and Rail insert for you. In Beat, flip before the bar empties, then tap again on GOOD or PERFECT. Lights show the result: red wrong, green correct.</p>
+          </div>
+        </div>
+
+        <div class="player-field" id="player-field">
+          <label for="player-name">Player name</label>
+          <input id="player-name" type="text" maxlength="24" autocomplete="nickname" placeholder="Enter your name" aria-describedby="player-name-error">
+          <p id="player-name-error" role="alert" hidden>Please enter your name to play.</p>
+        </div>
+        <div class="menu-actions" id="menu-actions">
+          <button class="menu-button primary" id="play-btn" type="button" aria-controls="mode-field">Play</button>
+          <div class="mode-field" id="mode-field" hidden>
+            <p class="mode-label">Choose a mode to play</p>
+            <div class="mode-buttons">
+              <button class="primary" id="play-arcade" type="button">Hub</button>
+              <button class="primary" id="play-horizontal" type="button">Rail</button>
+              <button class="primary" id="play-timing" type="button">Beat</button>
+            </div>
+            <button class="menu-button menu-back" id="mode-back" type="button">Back</button>
+          </div>
+          <button class="menu-button" id="leaderboard-toggle" type="button" aria-controls="leaderboard">Leaderboard</button>
+          <details class="settings-menu" id="settings-menu">
+            <summary>Settings</summary>
+            <div class="settings-panel">
+              <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="true" aria-label="Mute arcade sounds">Sound on</button>
+              <button class="sound-toggle" id="taunt-toggle" type="button" aria-pressed="true">Player messages on</button>
+              <button class="sound-toggle" id="reset-data" type="button">Clear my data</button>
+              <button class="menu-button menu-back" id="settings-back" type="button">Back</button>
+            </div>
+          </details>
+          <details class="settings-menu" id="info-menu">
+            <summary>Info</summary>
+            <div class="settings-panel">
+              <section class="info-block">
+                <h2>My links</h2>
+                <p>All my links in one place.</p>
+                <a class="sound-toggle info-action info-action-pending" id="info-linktree" aria-disabled="true">Link coming soon</a>
+              </section>
+              <section class="info-block">
+                <h2>GitHub</h2>
+                <p>Explore the game's open-source code.</p>
+                <a class="sound-toggle info-action info-action-pending" id="info-github" aria-disabled="true">GitHub link coming soon</a>
+              </section>
+              <section class="info-block">
+                <h2>Feedback</h2>
+                <p>Found a bug or have an idea for the game? Send a note through the feedback form.</p>
+                <a class="sound-toggle info-action info-action-pending" id="info-feedback" aria-disabled="true">Feedback link coming soon</a>
+              </section>
+              <button class="menu-button menu-back" id="info-back" type="button">Back</button>
+              <p class="info-footnote"><span id="game-version">v1.0.0</span> · Made with three.js (MIT) · Your scores stay in this browser</p>
+            </div>
+          </details>
+        </div>
+        <section class="share-panel" id="share-panel" aria-labelledby="share-title" hidden>
+          <h2 id="share-title">Share your score</h2>
+          <div class="share-actions">
+            <button class="primary" id="share-native" type="button">Share link</button>
+            <a class="secondary" id="share-download">Download image</a>
+          </div>
+          <p id="share-status" role="status" aria-live="polite"></p>
+        </section>
+        <section class="leaderboard" id="leaderboard" aria-labelledby="leaderboard-title" hidden>
+          <h2 id="leaderboard-title" tabindex="-1">Leaderboard</h2>
+          <div class="leaderboard-modes" id="leaderboard-modes" aria-label="Leaderboard mode" hidden>
+            <button type="button" id="scores-arcade" aria-pressed="true">Hub</button>
+            <button type="button" id="scores-horizontal" aria-pressed="false">Rail</button>
+            <button type="button" id="scores-timing" aria-pressed="false">Beat</button>
+          </div>
+          <p class="leaderboard-note" id="leaderboard-mode">Top 10 scores on this device</p>
+          <ol id="leaderboard-list" aria-label="Top scores"></ol>
+          <div class="leaderboard-current" id="leaderboard-current" hidden></div>
+          <p class="leaderboard-empty" id="leaderboard-empty">No scores yet. Play a game to set the first score!</p>
+          <p class="leaderboard-error" id="leaderboard-error" role="status" hidden>Scores could not be saved in this browser. They will only last for this session.</p>
+        </section>
+        <button class="primary leaderboard-back" id="leaderboard-back" type="button" hidden>Back to menu</button>
+      </div>
+    </div>
+
+    <div class="rotate-notice" id="rotate-notice" role="dialog" aria-modal="true" aria-labelledby="rotate-title" aria-describedby="rotate-copy" hidden>
+      <div class="rotate-card">
+        <svg class="rotate-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="15" y="6" width="18" height="30" rx="3"/><path d="M21 10h6"/><path d="M8 38a20 20 0 0 0 32 0"/><path d="M8 33v5h5"/></svg>
+        <h2 id="rotate-title">Rotate to portrait</h2>
+        <p id="rotate-copy">PHIT DAN plays in portrait. Turn your device upright to keep playing.</p>
+      </div>
+    </div>
+
+    <div class="pause-notice" id="pause-notice" role="dialog" aria-modal="true" aria-labelledby="pause-title" aria-describedby="pause-copy" hidden>
+      <div class="pause-card">
+        <svg class="pause-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="9" width="10" height="30" rx="2.5"/><rect x="27" y="9" width="10" height="30" rx="2.5"/></svg>
+        <h2 id="pause-title">Paused</h2>
+        <p id="pause-copy">Your run is on hold. Nothing moves and no deadline runs while this screen is up. Continue gives you a 3-second countdown before play resumes.</p>
+        <p class="pause-countdown" id="pause-countdown" aria-live="assertive" hidden>3</p>
+        <button class="primary" id="pause-resume" type="button">Continue</button>
+      </div>
+    </div>
+  </main>
+  <script src="./share-score.js?v=card-3"></script>
+  <script type="module" src="./game.js?v=info-9"></script>
+</body>
+</html>

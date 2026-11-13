@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#17142e">
+  <title>ทดลองการเปลี่ยนรอบ — USB?</title>
+  <link rel="stylesheet" href="./fonts.css?v=3">
+  <link rel="stylesheet" href="./style.css?v=arcade-palette-1">
+  <link rel="stylesheet" href="./transition-preview.css?v=6">
+</head>
+<body>
+  <main class="game-shell preview-shell" aria-label="ทดลองเปรียบเทียบการเปลี่ยนรอบ">
+    <div class="stage" aria-hidden="true"></div>
+    <div id="preview-scene" aria-label="ภาพตัวอย่างสามมิติของการเปลี่ยนช่อง USB"></div>
+    <header class="preview-header">
+      <div class="preview-topline"><span>ตัวอย่างอัตโนมัติ</span></div>
+      <h1>ลองดูการเปลี่ยนรอบ</h1>
+      <div class="preview-choices" role="group" aria-label="เลือกแบบที่ต้องการเปรียบเทียบ">
+        <button type="button" id="mode-cover" aria-pressed="true">ช่องเปลี่ยนบนฮับ</button>
+        <button type="button" id="mode-slide" aria-pressed="false">เลื่อนทั้งฉาก</button>
+        <button type="button" id="mode-flip" aria-pressed="false">พลิกฮับ</button>
+        <button type="button" id="mode-flip-hidden" aria-pressed="false">พลิกแบบซ่อนด้านหลัง</button>
+        <button type="button" id="mode-thick" aria-pressed="false">ฮับหนาบังไดรฟ์</button>
+        <button type="button" id="mode-dissolve" aria-pressed="false">ภาพซ้อนเปลี่ยน</button>
+        <button type="button" id="mode-scroll" aria-pressed="false">ฮับยาวเลื่อนลง</button>
+      </div>
+    </header>
+    <footer class="preview-footer">
+      <div class="preview-info"><strong id="preview-step">กำลังเตรียมตัวอย่าง</strong><span id="preview-description">ฮับอยู่นิ่ง ช่องเก่าถูกปิดแล้วเผยช่องใหม่</span></div>
+      <button type="button" id="pause-btn" aria-pressed="false">หยุดชั่วคราว</button>
+    </footer>
+  </main>
+  <script type="module" src="./transition-preview.js?v=8"></script>
+</body>
+</html>

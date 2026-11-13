@@ -7,15 +7,6 @@ Flip the connector into the right orientation, beat the clock, and see how long
 you can keep your streak going. PHIT DAN is a free, browser-based 3D arcade game
 with three endless modes.
 
-## Gameplay screenshots
-
-| Hub | Rail | Beat |
-| :---: | :---: | :---: |
-| ![Hub mode gameplay showing a USB drive and socket](assets/screenshots/hub.jpg) | ![Rail mode gameplay showing a USB drive and a row of sockets](assets/screenshots/rail.jpg) | ![Beat mode gameplay showing a USB drive and timing marker](assets/screenshots/beat.jpg) |
-
-These images show the game running in each mode. Timers were extended in a
-separate preview copy to make the screenshots possible.
-
 ## Contributors and acknowledgements
 
 - **Ompaemapoot** — project owner and copyright holder.
@@ -24,6 +15,15 @@ separate preview copy to make the screenshots possible.
 
 OpenCode is credited here as a development tool; GitHub's automatic Contributors
 list is based on commit attribution to GitHub accounts.
+
+## Gameplay screenshots
+
+| Hub | Rail | Beat |
+| :---: | :---: | :---: |
+| ![Hub mode gameplay showing a USB drive and socket](assets/screenshots/hub.jpg) | ![Rail mode gameplay showing a USB drive and a row of sockets](assets/screenshots/rail.jpg) | ![Beat mode gameplay showing a USB drive and timing marker](assets/screenshots/beat.jpg) |
+
+These images show the game running in each mode. Timers were extended in a
+separate preview copy to make the screenshots possible.
 
 ## How to play
 
